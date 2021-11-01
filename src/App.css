@@ -152,3 +152,10 @@ img {
   border-radius: 50%;
   margin: 2px 5px;
 }
+
+.user-container{
+  font-weight: bold;
+  background-color: #ffffff;
+  padding: 10px;
+  margin-bottom: 10px;
+}

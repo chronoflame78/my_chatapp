@@ -1,39 +1,30 @@
 import React from "react";
 import "./App.css";
 
-import SignIn from "./components/sign-in/sign-in.components";
-import ChatRoom from "./components/chat-room/chat-room.components";
+import SignIn from "./components/sign-in/sign-in.component";
 
+import Header from "./components/header/header.component";
+import ListUser from "./components/list-user/list-user.component";
 
+import { connect } from "react-redux";
+import { checkUserSession } from "./redux/user/user.actions";
 
-import { useAuthState } from "react-firebase-hooks/auth";
+function App({currentUser}) {
 
-import { auth } from "./firebase/firebase.utils";
-
-
-
-
-
-
-function App() {
-  const [user] = useAuthState(auth);
   return (
     <div className="App">
-      <header>
-        <SignOut/>
-      </header>
-
-      <section>
-        {user ? <ChatRoom/> : <SignIn/>}
-      </section>
+      <Header />
+      <section>{currentUser ? <ListUser /> : <SignIn />}</section>
     </div>
   );
 }
 
-function SignOut(){
-  return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
-  )
-}
+const mapStateToProps = (state) => {
+  return { currentUser: state.user.currentUser };
+};
 
-export default App;
+const mapDispatchToProps = (dispatch) => ({
+  checkUserSession: () => dispatch(checkUserSession()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,10 +1,10 @@
 import React from "react";
-import { firestore, auth } from "../../firebase/firebase.utils";
+import { firestore } from "../../firebase/firebase.utils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import ChatRoom from "./../chat-room/chat-room.component";
 import { connect } from "react-redux";
+import { openConversation } from "../../redux/user/user.actions";
 
-const ListUser = ({currentUser}) => {
+const ListUser = ({ currentUser, openConversation }) => {
   const userRef = firestore.collection("users");
   const query = userRef.orderBy("displayName");
 
@@ -20,17 +20,24 @@ const ListUser = ({currentUser}) => {
             return item.id !== currentUser.id;
           })
           .map((user) => (
-            <div className="user-container" key={user.id}>
+            <div
+              className="user-container"
+              key={user.id}
+              onClick={() => openConversation(user.id)}
+            >
               {user.displayName}
-              <ChatRoom id={user.id} />
             </div>
           ))}
     </div>
   );
 };
 
-const mapStateToProps = ({user: {currentUser}}) => ({
-    currentUser: currentUser,
+const mapStateToProps = ({ user: { currentUser } }) => ({
+  currentUser: currentUser,
 });
 
-export default connect(mapStateToProps)(ListUser);
+const mapDispatchToProps = (dispatch) => ({
+  openConversation: (id) => dispatch(openConversation(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListUser);

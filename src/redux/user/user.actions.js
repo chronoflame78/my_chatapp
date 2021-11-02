@@ -51,3 +51,7 @@ export const openConversation = (id) => ({
     type: UserActionTypes.OPEN_CONVERSATION,
     payload: id
 })
+
+export const closeConversation = () => ({
+    type: UserActionTypes.CLOSE_CONVERSATION
+})

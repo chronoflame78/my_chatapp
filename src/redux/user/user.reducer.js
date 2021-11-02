@@ -1,7 +1,9 @@
 import UserActionTypes from "./user.types";
 
 const INITIAL_STATE = {
-    currentUser: null
+    currentUser: null,
+    isOpen: false,
+    chatId: null
 }
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -24,6 +26,20 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 error: action.payload
             }
+        case UserActionTypes.OPEN_CONVERSATION:{
+            return {
+                ...state,
+                chatId: action.payload,
+                isOpen: true
+            }
+        }
+        case UserActionTypes.CLOSE_CONVERSATION:{
+            return {
+                ...state,
+                chatId: null,
+                isOpen: false
+            }
+        }
         default:
             return state;
     }

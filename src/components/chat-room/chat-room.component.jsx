@@ -4,19 +4,37 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import ChatMessage from "../chat-message/chat-message.component";
 import firebase from "firebase/compat/app";
 import { connect } from "react-redux";
+import { closeConversation } from "../../redux/user/user.actions";
 
-const ChatRoom = ({id, currentUser}) => {
+const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
   const messageRef = firestore.collection("messages");
-  
-  //const messageRef = firestore.collection("users").doc(id).collection("messages");
-  // console.log(currentUser.id);
-  // console.log(id);
-  const query = messageRef.where("fromId","==",currentUser.id).where("toId","==",id).orderBy("createdAt").limit(25);
-  //const query = messageRef.where("toId","==",id).orderBy("createdAt").limit(25);
-  //console.log(query);
 
-  const [messages] = useCollectionData(query, { idField: "id" });
-  //console.log(messages);
+  const fromQuery = messageRef
+    .where("fromId", "==", currentUser.id)
+    .where("toId", "==", chatId)
+    .limit(25);
+  
+  const toQuery = messageRef
+  .where("toId", "==", currentUser.id)
+  .where("fromId", "==", chatId)
+  .limit(25);
+
+  const [messagesFrom] = useCollectionData(fromQuery, { idField: "id" });
+  const [messagesTo] = useCollectionData(toQuery, { idField: "id" });
+  debugger;
+  let messages = [];
+  if(!!messagesFrom && !messagesTo){
+    messages = [...messagesFrom];
+  }
+  else if (!messagesFrom && !!messagesTo){
+    messages = [...messagesTo];
+  }
+  else if (!!messagesFrom && !! messagesTo){
+    messages = [...messagesFrom, ...messagesTo];
+  }
+  else{
+    messages = [];
+  }
 
   const [formValue, setFormValue] = useState("");
 
@@ -27,7 +45,7 @@ const ChatRoom = ({id, currentUser}) => {
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       fromId: uid,
-      toId: id,
+      toId: chatId,
       photoURL,
     });
 
@@ -37,6 +55,11 @@ const ChatRoom = ({id, currentUser}) => {
   return (
     <div>
       <div>
+        <button type="button" onClick={closeConversation}>
+          Close
+        </button>
+      </div>
+      <div>
         {messages &&
           messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
       </div>
@@ -45,7 +68,9 @@ const ChatRoom = ({id, currentUser}) => {
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}
         />
-        <button type="submit" disabled={!formValue}>Send</button>
+        <button type="submit" disabled={!formValue}>
+          Send
+        </button>
       </form>
     </div>
   );
@@ -53,8 +78,13 @@ const ChatRoom = ({id, currentUser}) => {
 
 const mapStateToProps = (state) => {
   return {
-      currentUser: state.user.currentUser,
-  }
-} 
+    currentUser: state.user.currentUser,
+    chatId: state.user.chatId
+  };
+};
 
-export default connect(mapStateToProps)(ChatRoom);
+const mapDispatchToProps = (dispatch) => ({
+  closeConversation: () => dispatch(closeConversation()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

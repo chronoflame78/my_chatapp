@@ -3,6 +3,8 @@ import { firestore } from "../../firebase/firebase.utils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { connect } from "react-redux";
 import { openConversation } from "../../redux/user/user.actions";
+import Avatar from "../avatar/avatar.component";
+import './list-user.styles.scss';
 
 const ListUser = ({ currentUser, openConversation }) => {
   const userRef = firestore.collection("users");
@@ -10,13 +12,14 @@ const ListUser = ({ currentUser, openConversation }) => {
 
   const [users] = useCollectionData(query, { idField: "id" });
 
+  console.log(users);
+
   return (
-    <div>
+    <div className="list-user-container">
+      <div className="user-list-heading">Active Users</div>
       {users &&
         users
           .filter((item) => {
-            console.log(item);
-            console.log(currentUser);
             return item.id !== currentUser.id;
           })
           .map((user) => (
@@ -25,6 +28,7 @@ const ListUser = ({ currentUser, openConversation }) => {
               key={user.id}
               onClick={() => openConversation(user.id)}
             >
+              <Avatar imageUrl={user.avatarURL} size={30}/>
               {user.displayName}
             </div>
           ))}

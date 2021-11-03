@@ -26,11 +26,12 @@ body {
 }
 
 .App section {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; */
   min-height: 100vh;
   background-color: rgb(40, 37, 53);
+  padding-top: 100px;
 }
 
 main {
@@ -54,7 +55,7 @@ main::-webkit-scrollbar-thumb {
   background: #6649b8;
 }
 
-form {
+.chat-form {
   height: 10vh;
   position: fixed;
   bottom: 0;
@@ -65,7 +66,7 @@ form {
   font-size: 1.5rem;
 }
 
-form button {
+.chat-form button {
   width: 20%;
   background-color: rgb(56, 56, 143);
 }
@@ -80,6 +81,7 @@ input {
   outline: none;
   border: none;
   padding: 0 10px;
+  box-sizing: border-box;
 }
 
 button {

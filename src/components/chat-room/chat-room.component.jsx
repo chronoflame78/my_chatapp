@@ -5,6 +5,8 @@ import ChatMessage from "../chat-message/chat-message.component";
 import firebase from "firebase/compat/app";
 import { connect } from "react-redux";
 import { closeConversation } from "../../redux/user/user.actions";
+import './chat-room.styles.scss';
+import { orderBy } from "lodash";
 
 const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
   const messageRef = firestore.collection("messages");
@@ -21,16 +23,16 @@ const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
 
   const [messagesFrom] = useCollectionData(fromQuery, { idField: "id" });
   const [messagesTo] = useCollectionData(toQuery, { idField: "id" });
-  debugger;
+
   let messages = [];
   if(!!messagesFrom && !messagesTo){
-    messages = [...messagesFrom];
+    messages = orderBy([...messagesFrom], 'createdAt', 'asc');
   }
   else if (!messagesFrom && !!messagesTo){
-    messages = [...messagesTo];
+    messages = orderBy([...messagesTo], 'createdAt', 'asc');
   }
   else if (!!messagesFrom && !! messagesTo){
-    messages = [...messagesFrom, ...messagesTo];
+    messages = orderBy([...messagesFrom, ...messagesTo], 'createdAt', 'asc');
   }
   else{
     messages = [];
@@ -40,13 +42,13 @@ const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    const { uid, photoURL } = auth.currentUser;
+    const { id, avatarURL } = currentUser;
     await messageRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      fromId: uid,
+      fromId: id,
       toId: chatId,
-      photoURL,
+      avatarURL,
     });
 
     setFormValue("");
@@ -55,7 +57,7 @@ const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
   return (
     <div>
       <div>
-        <button type="button" onClick={closeConversation}>
+        <button type="button" className="close-button" onClick={closeConversation}>
           Close
         </button>
       </div>
@@ -63,7 +65,7 @@ const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
         {messages &&
           messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
       </div>
-      <form onSubmit={sendMessage}>
+      <form className="chat-form" onSubmit={sendMessage}>
         <input
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}

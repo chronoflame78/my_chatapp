@@ -2,13 +2,13 @@ import React from "react";
 import { auth } from "../../firebase/firebase.utils";
 
 const ChatMessage = (props) => {
-    const { text, uid, photoURL } = props.message;
+    const { text, fromId, avatarURL } = props.message;
 
-    const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+    const messageClass = fromId === auth.currentUser.uid ? 'sent' : 'received';
 
     return (
         <div className={`message ${messageClass}`}>
-            <img src={photoURL} alt="" />
+            <img src={avatarURL} alt="" />
             <p>{text}</p>
         </div>
     )

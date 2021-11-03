@@ -1,0 +1,21 @@
+.sign-up-form{
+    padding: 0 30px;
+
+    label{
+        color: #ffffff;
+        padding: 10px;
+        display: block;
+        text-align: left;
+    }
+
+    select{
+        display: block;
+        width: 100%;
+        height: 36px;
+    }
+
+    .next-button{
+        margin-top: 60px;
+        background-color: #5bc0de;
+    }
+}

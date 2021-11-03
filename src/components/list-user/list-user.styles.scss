@@ -1,0 +1,21 @@
+.list-user-container{
+    padding: 0 30px;
+
+    .user-container{
+        display: flex;
+        align-items: center;
+    }
+
+    .avatar-cover{
+        margin-right: 20px;
+    }
+
+    .user-list-heading{
+        font-weight: bold;
+        font-size: 20px;
+        color: #ffffff;
+        margin-bottom: 50px;
+        margin-top: 20px;
+    }
+}
+

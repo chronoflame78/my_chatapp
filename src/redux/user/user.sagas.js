@@ -7,6 +7,7 @@ import {
   googleProvider,
   createUserProfileDocument,
   getCurrentUser,
+  registerNewChatProfile
 } from "../../firebase/firebase.utils";
 import {
   signInFailure,
@@ -21,7 +22,8 @@ export function* getSnapshotFromUserAuth(userAuth, additionalData) {
   try {
     const userRef = yield call(createUserProfileDocument, userAuth, additionalData);
     const userSnapshot = yield userRef.get();
-    yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data }));
+    const data = userSnapshot.data();
+    yield put(signInSuccess({ id: userSnapshot.id, ...data, userAuth }));
   } catch (error) {
     yield put(signInFailure(error));
   }
@@ -45,17 +47,15 @@ export function* signOut() {
   }
 }
 
-export function* signUp({ payload: { email, password, displayName } }) {
+export function* signUp({ payload: userData }) {
   try {
-    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
-    yield put(signUpSuccess({ user, additionalData: { displayName } }));
+    const userRef = yield registerNewChatProfile(userData);
+    const userSnapshot = yield userRef.get();
+    const data = userSnapshot.data();
+    yield put(signUpSuccess({id: userSnapshot.id, ...data}));
   } catch (error) {
     yield put(signUpFailure(error));
   }
-}
-
-export function* signInAfterSignUp({ payload: { user, additionalData } }) {
-  yield getSnapshotFromUserAuth(user, additionalData);
 }
 
 
@@ -87,16 +87,11 @@ export function* onSignUpStart() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
 }
 
-export function* onSignUpSuccess() {
-  yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp)
-}
-
 export function* userSagas() {
   yield all([
     call(onGoogleSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
-    call(onSignUpStart),
-    call(onSignUpSuccess)
+    call(onSignUpStart)
   ]);
 }

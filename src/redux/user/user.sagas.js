@@ -7,7 +7,9 @@ import {
   googleProvider,
   createUserProfileDocument,
   getCurrentUser,
-  registerNewChatProfile
+  registerNewChatProfile,
+  setUserUnavailable,
+  setUserAvailable
 } from "../../firebase/firebase.utils";
 import {
   signInFailure,
@@ -16,6 +18,8 @@ import {
   signOutFailure,
   signUpSuccess,
   signUpFailure,
+  setStatusSuccess,
+  setStatusFailure
 } from "./user.actions";
 
 export function* getSnapshotFromUserAuth(userAuth, additionalData) {
@@ -23,7 +27,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalData) {
     const userRef = yield call(createUserProfileDocument, userAuth, additionalData);
     const userSnapshot = yield userRef.get();
     const data = userSnapshot.data();
-    yield put(signInSuccess({ id: userSnapshot.id, ...data, userAuth }));
+    yield put(signInSuccess({ id: userSnapshot.id, ...data }));
   } catch (error) {
     yield put(signInFailure(error));
   }
@@ -58,6 +62,25 @@ export function* signUp({ payload: userData }) {
   }
 }
 
+export function* setUnavailable({payload: {chatId, userId}}) {
+  console.log(userId)
+  try {
+    yield call(setUserUnavailable, chatId, userId);
+    yield put(setStatusSuccess());
+  } catch (error) {
+    yield put(setStatusFailure(error));
+  }
+}
+
+export function* setAvailable({payload: userId}) {
+  try {
+    yield call(setUserAvailable, userId);
+    yield put(setStatusSuccess());
+  } catch (error) {
+    yield put(setStatusFailure(error));
+  }
+}
+
 
 export function* onGoogleSignInStart() {
   yield takeLatest(UserActionTypes.GOOGLE_SIGN_IN_START, signInWithGoogle);
@@ -87,11 +110,21 @@ export function* onSignUpStart() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
 }
 
+export function* onOpenConversation() {
+  yield takeLatest(UserActionTypes.OPEN_CONVERSATION, setUnavailable);
+}
+
+export function* onCloseConversation() {
+  yield takeLatest(UserActionTypes.CLOSE_CONVERSATION, setAvailable);
+}
+
 export function* userSagas() {
   yield all([
     call(onGoogleSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
-    call(onSignUpStart)
+    call(onSignUpStart),
+    call(onOpenConversation),
+    call(onCloseConversation)
   ]);
 }

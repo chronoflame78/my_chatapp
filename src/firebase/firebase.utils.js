@@ -43,14 +43,14 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 }
 
 export const registerNewChatProfile = async (userData) => {
-    const {userAuth} = userData;
-    if (!userAuth) return;
+    const {userId} = userData;
+    if (!userId) return;
   
-    const userRef = firestore.doc(`users/${userAuth.uid}`);
+    const userRef = firestore.doc(`users/${userId}`);
   
     const { displayName, birthday, gender } = userData;
     const avatarString = displayName.replaceAll(' ', '+');
-    const avatarURL = `https://ui-avatars.com/api/?name=${avatarString}`;
+    const avatarURL = `https://ui-avatars.com/api/?background=random&name=${avatarString}`;
 
     try {
         await userRef.set({
@@ -58,8 +58,9 @@ export const registerNewChatProfile = async (userData) => {
             birthday,
             gender,
             avatarURL: avatarURL,
+            isAvailable: true,
             isRegistered: true
-        })
+        }, {merge: true})
     } catch (error) {
         console.log('error creating user', error.message);
     }
@@ -73,4 +74,28 @@ export const getCurrentUser = () => {
           resolve(userAuth);
       }, reject)
   })
+}
+
+export const setUserUnavailable = async(chatId, userId) => {
+    const userRef = firestore.doc(`users/${userId}`);
+    try {
+        await userRef.set({
+            isAvailable: false,
+            isTalkingTo: chatId
+        }, {merge: true})
+    } catch (error) {
+        console.log('error set user status', error.message);
+    }
+}
+
+export const setUserAvailable = async(userId) => {
+    const userRef = firestore.doc(`users/${userId}`);
+    try {
+        await userRef.set({
+            isAvailable: true,
+            isTalkingTo: null
+        }, {merge: true})
+    } catch (error) {
+        console.log('error set user status', error.message);
+    }
 }

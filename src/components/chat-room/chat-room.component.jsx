@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { firestore, auth } from "../../firebase/firebase.utils";
+import { firestore } from "../../firebase/firebase.utils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import ChatMessage from "../chat-message/chat-message.component";
 import firebase from "firebase/compat/app";
@@ -55,9 +55,9 @@ const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
   };
 
   return (
-    <div>
+    <div className="chat-room-container">
       <div>
-        <button type="button" className="close-button" onClick={closeConversation}>
+        <button type="button" className="close-button" onClick={() => closeConversation(currentUser.id)}>
           Close
         </button>
       </div>
@@ -86,7 +86,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  closeConversation: () => dispatch(closeConversation()),
+  closeConversation: (userId) => dispatch(closeConversation(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

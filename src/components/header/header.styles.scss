@@ -1,0 +1,48 @@
+header {
+  background-color: #181717;
+  height: 10vh;
+  min-height: 50px;
+  color: white;
+  position: fixed;
+  width: 100%;
+  max-width: 728px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+  padding: 30px;
+  box-sizing: border-box;
+
+  .chat-app-header{
+      width: 100%;
+      font-weight: bold;
+      font-size: 20px;
+  }
+
+  .avatar-container{
+      margin-right: 50px;
+  }
+
+  .display-name {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .sign-out-button {
+    background-color: #282c34;
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+
+    &:hover{
+        background-color: red;
+    }
+  }
+}

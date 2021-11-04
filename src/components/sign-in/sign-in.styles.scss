@@ -1,0 +1,50 @@
+.sign-in-container{
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .google-sign-in{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: #ffffff;
+        color: black;
+        width: 300px;
+        cursor: pointer;
+        padding: 10px;
+
+        img {
+            flex-basis: 40px;
+        }
+
+        .google-text{
+            text-align: center;
+            flex-grow: 1;
+            font-weight: bold;
+        }
+    }
+
+    .facebook-sign-in{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: #ffffff;
+        color: black;
+        width: 300px;
+        cursor: pointer;
+        padding: 10px;
+        margin-top: 30px;
+
+        img {
+            flex-basis: 40px;
+        }
+
+        .google-text{
+            text-align: center;
+            flex-grow: 1;
+            font-weight: bold;
+        }
+    }
+}

@@ -1,9 +1,102 @@
 .list-user-container{
     padding: 0 30px;
 
+    .not-available{
+        opacity: 0.6;
+    }
+
+    .user-detail-container{
+        background-color: #ffffff;
+        margin-top: -20px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        padding-left: 20px;
+        font-size: 12px;
+
+        label{
+            text-align: left;
+            font-weight: bold;
+        }
+
+        span{
+            text-align: left;
+            margin-bottom: 10px;
+        }
+    }
+
     .user-container{
         display: flex;
         align-items: center;
+        font-weight: bold;
+        background-color: #ffffff;
+        padding: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+
+        .name-and-status{
+            text-align: left;
+
+            .name-text{
+                margin-bottom: 3px;
+            }
+
+            .user-status{
+                display: flex;
+                align-items: center;
+
+                .status-icon{
+                    border-radius: 50%;
+                    height: 10px;
+                    width: 10px;
+                }
+
+                .status-text{
+                    padding-left: 10px;
+                    font-size: 12px;
+                }
+
+                .green{
+                    background-color: green;
+                }
+
+                .red{
+                    background-color: red;
+                }
+
+                .green-text{
+                    color: green;
+                }
+
+                .red-text{
+                    color: red;
+                }
+                .blue{
+                    background-color: #3870ed!important;
+                }
+                .blue-text{
+                    color: #3870ed!important;
+                }
+            }
+        }
+
+        .button-detail-container{
+            flex-grow: 1;
+            display: flex;
+            align-content: flex-end;
+            flex-direction: row-reverse;
+
+            .button-detail{
+                background-color: lightseagreen;
+                padding: 10px 20px;
+                font-size: 14px;
+                border-radius: 6px;
+
+                &:hover{
+                    background-color: lightskyblue;
+                }
+            }
+        }
     }
 
     .avatar-cover{

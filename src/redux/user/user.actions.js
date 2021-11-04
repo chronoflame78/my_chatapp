@@ -47,11 +47,23 @@ export const signUpFailure = (error) => ({
     payload: error
 })
 
-export const openConversation = (id) => ({
+export const openConversation = (chatId, userId) => ({
     type: UserActionTypes.OPEN_CONVERSATION,
+    payload: {
+        chatId,
+        userId
+    }
+})
+
+export const closeConversation = (id) => ({
+    type: UserActionTypes.CLOSE_CONVERSATION,
     payload: id
 })
 
-export const closeConversation = () => ({
-    type: UserActionTypes.CLOSE_CONVERSATION
-})
+export const setStatusSuccess = () => ({
+    type: UserActionTypes.SET_STATUS_SUCCESS
+});
+
+export const setStatusFailure = () => ({
+    type: UserActionTypes.SET_STATUS_FAILURE
+});

@@ -21,9 +21,11 @@ const ChatRoom = ({ chatId, currentUser, closeConversation }) => {
   .where("fromId", "==", chatId)
   .limit(25);
 
+  //FIRE STORE QUERY LIMITATION
   const [messagesFrom] = useCollectionData(fromQuery, { idField: "id" });
   const [messagesTo] = useCollectionData(toQuery, { idField: "id" });
 
+  //MERGE MESSAGES FROM CURRENT USER WITH MESSAGES FROM ANOTHER PERSON
   let messages = [];
   if(!!messagesFrom && !messagesTo){
     messages = orderBy([...messagesFrom], 'createdAt', 'asc');

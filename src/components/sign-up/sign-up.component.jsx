@@ -13,8 +13,6 @@ const SignUp = ({ signUpStart, currentUser }) => {
 
   const { displayName, birthday, gender } = userData;
 
-  console.log(userData);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -27,7 +25,6 @@ const SignUp = ({ signUpStart, currentUser }) => {
       alert("Birthday must not exceed today.");
       return;
     }
-    
 
     signUpStart({ displayName, birthday, gender, userId: currentUser.id });
   };

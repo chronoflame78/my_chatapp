@@ -16,6 +16,7 @@ firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const facebookProvider = new firebase.auth.FacebookAuthProvider();
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;

@@ -60,14 +60,23 @@ const UserItem = ({ user, currentUser, openConversation }) => {
           </button>
         </div>
       </div>
-      {isDetailOpen && <div className="user-detail-container">
+      {isDetailOpen && (
+        <div
+          className={
+            "user-detail-container" +
+            (user.isAvailable || user.isTalkingTo === currentUser.id
+              ? ""
+              : " not-available")
+          }
+        >
           <label>Email:</label>
           <span>{user.email}</span>
           <label>Birth Day:</label>
           <span>{user.birthday}</span>
           <label>Gender:</label>
           <span>{user.gender}</span>
-          </div>}
+        </div>
+      )}
     </div>
   );
 };

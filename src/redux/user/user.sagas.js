@@ -9,7 +9,8 @@ import {
   getCurrentUser,
   registerNewChatProfile,
   setUserUnavailable,
-  setUserAvailable
+  setUserAvailable,
+  facebookProvider
 } from "../../firebase/firebase.utils";
 import {
   signInFailure,
@@ -42,6 +43,15 @@ export function* signInWithGoogle() {
   }
 }
 
+export function* signInWithFacebook() {
+  try {
+    const { user } = yield auth.signInWithPopup(facebookProvider);
+    yield getSnapshotFromUserAuth(user);
+  } catch (error) {
+    yield put(signInFailure(error));
+  }
+}
+
 export function* signOut() {
   try {
     yield auth.signOut();
@@ -63,7 +73,6 @@ export function* signUp({ payload: userData }) {
 }
 
 export function* setUnavailable({payload: {chatId, userId}}) {
-  console.log(userId)
   try {
     yield call(setUserUnavailable, chatId, userId);
     yield put(setStatusSuccess());
@@ -84,6 +93,10 @@ export function* setAvailable({payload: userId}) {
 
 export function* onGoogleSignInStart() {
   yield takeLatest(UserActionTypes.GOOGLE_SIGN_IN_START, signInWithGoogle);
+}
+
+export function* onFacebookSignInStart() {
+  yield takeLatest(UserActionTypes.FACEBOOK_SIGN_IN_START, signInWithFacebook);
 }
 
 export function* isUserAuthenticated() {
@@ -121,6 +134,7 @@ export function* onCloseConversation() {
 export function* userSagas() {
   yield all([
     call(onGoogleSignInStart),
+    call(onFacebookSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
     call(onSignUpStart),

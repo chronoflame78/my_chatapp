@@ -11,8 +11,6 @@ const ListUser = ({ currentUser }) => {
 
   const [users] = useCollectionData(query, { idField: "id" });
 
-  console.log(users);
-
   return (
     <div className="list-user-container">
       <div className="user-list-heading">Active Users</div>
